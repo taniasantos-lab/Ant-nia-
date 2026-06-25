@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OrientaTech — Escola 4045 | Cacuaco</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0A1628;
+  --navy2: #112040;
+  --navy3: #1A3060;
+  --blue: #1E4DA1;
+  --blue-mid: #2563EB;
+  --blue-light: #3B82F6;
+  --blue-pale: #EFF6FF;
+  --white: #FFFFFF;
+  --off-white: #F8FAFF;
+  --muted: #6B7EA8;
+  --border: rgba(30,77,161,0.18);
+  --gold: #D4AF37;
+  --gold2: #F0D060;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--navy);
+  color: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ══ SCREENS ══ */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ══ NAV ══ */
+.topbar {
+  background: rgba(10,22,40,0.96);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 50;
+  flex-shrink: 0;
+}
+.logo-wrap { display: flex; align-items: center; gap: 12px; }
+.logo-icon {
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, var(--blue-mid), var(--blue-light));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+}
+.logo-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem; font-weight: 800;
+  color: var(--white); letter-spacing: -0.5px;
+}
+.logo-text span { color: var(--blue-light); }
+.school-badge {
+  background: rgba(37,99,235,0.12);
+  border: 1px solid rgba(37,99,235,0.3);
+  padding: 5px 14px; border-radius: 100px;
+  font-size: 0.72rem; font-weight: 600; color: var(--blue-light);
+  letter-spacing: 0.5px;
+}
+.topbar-right { display: flex; align-items: center; gap: 16px; }
+.student-info { text-align: right; display: none; }
+.student-info .s-name { font-weight: 600; font-size: 0.85rem; }
+.student-info .s-score { color: var(--blue-light); font-size: 0.75rem; }
+
+/* ══ HOME SCREEN ══ */
+#home {
+  background: var(--navy);
+  position: relative; overflow: hidden;
+}
+.home-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  overflow: hidden;
+}
+.bg-circle {
+  position: absolute; border-radius: 50%;
+  background: radial-gradient(circle, rgba(37,99,235,0.12), transparent 70%);
+}
+.bg-c1 { width: 700px; height: 700px; top: -200px; right: -200px; }
+.bg-c2 { width: 500px; height: 500px; bottom: -150px; left: -100px; }
+.bg-grid {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(37,99,235,0.04) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(37,99,235,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.home-inner {
+  position: relative; z-index: 1;
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 80px 48px; text-align: center;
+}
+.home-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(37,99,235,0.1);
+  border: 1px solid rgba(37,99,235,0.25);
+  padding: 7px 18px; border-radius: 100px;
+  font-size: 0.75rem; font-weight: 600;
+  color: var(--blue-light); letter-spacing: 1px;
+  text-transform: uppercase; margin-bottom: 32px;
+  animation: fadeUp 0.5s ease both;
+}
+.pulse-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--blue-light);
+  animation: pulseDot 1.5s ease infinite;
+}
+@keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.7)} }
+
+.home-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 6vw, 5.2rem);
+  font-weight: 800; line-height: 1.05;
+  letter-spacing: -2px; margin-bottom: 24px;
+  animation: fadeUp 0.5s 0.1s ease both;
+}
+.home-title .accent { color: var(--blue-light); }
+.home-title .gold { color: var(--gold2); }
+
+.home-sub {
+  font-size: 1.05rem; color: var(--muted);
+  max-width: 560px; line-height: 1.75;
+  margin-bottom: 48px; font-weight: 300;
+  animation: fadeUp 0.5s 0.2s ease both;
+}
+
+/* REGISTRATION FORM */
+.reg-form {
+  background: rgba(17,32,64,0.8);
+  border: 1px solid var(--border);
+  border-radius: 20px; padding: 36px 40px;
+  width: 100%; max-width: 480px;
+  backdrop-filter: blur(20px);
+  animation: fadeUp 0.5s 0.3s ease both;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.4);
+}
+.reg-form h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem; margin-bottom: 6px;
+}
+.reg-form p { color: var(--muted); font-size: 0.85rem; margin-bottom: 24px; }
+.field { margin-bottom: 16px; }
+.field label { font-size: 0.8rem; font-weight: 600; color: var(--muted); display: block; margin-bottom: 7px; letter-spacing: 0.3px; }
+.field input, .field select {
+  width: 100%; padding: 12px 16px;
+  background: rgba(10,22,40,0.8);
+  border: 1.5px solid var(--border);
+  border-radius: 10px; color: var(--white);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.9rem; outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.field input:focus, .field select:focus {
+  border-color: var(--blue-mid);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+.field select option { background: var(--navy2); }
+.btn-start {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, var(--blue-mid), var(--blue-light));
+  border: none; border-radius: 10px;
+  color: white; font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.95rem; font-weight: 700;
+  cursor: pointer; margin-top: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  letter-spacing: 0.3px;
+}
+.btn-start:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(37,99,235,0.4);
+}
+
+/* JOURNEY STEPS */
+.journey {
+  display: flex; align-items: center; gap: 0;
+  margin-top: 48px; animation: fadeUp 0.5s 0.4s ease both;
+}
+.j-step {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 0.8rem; color: var(--muted);
+}
+.j-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: rgba(37,99,235,0.1); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+}
+.j-line { width: 40px; height: 1px; background: var(--border); margin: 0 8px; }
+
+/* ══ GAME SCREEN ══ */
+#game { background: var(--off-white); color: var(--navy); }
+#game .topbar { background: var(--white); border-color: rgba(0,0,0,0.08); }
+#game .topbar .logo-text { color: var(--navy); }
+#game .school-badge { background: var(--blue-pale); color: var(--blue-mid); border-color: rgba(37,99,235,0.2); }
+
+.game-layout {
+  flex: 1; display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 0;
+}
+
+/* SIDEBAR */
+.game-sidebar {
+  background: var(--navy);
+  padding: 32px 24px;
+  display: flex; flex-direction: column; gap: 24px;
+}
+.sidebar-player {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px; padding: 20px; text-align: center;
+}
+.player-avatar {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue-mid), var(--blue-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; margin: 0 auto 12px;
+  border: 3px solid rgba(255,255,255,0.1);
+}
+.player-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
+.player-class { color: var(--muted); font-size: 0.75rem; }
+
+.score-display {
+  background: linear-gradient(135deg, var(--blue-mid), var(--navy3));
+  border-radius: 14px; padding: 20px; text-align: center;
+}
+.score-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 6px; }
+.score-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem; font-weight: 800; color: var(--gold2);
+  line-height: 1;
+}
+.score-sub { font-size: 0.72rem; color: rgba(255,255,255,0.5); margin-top: 4px; }
+
+.sidebar-section { }
+.sidebar-section h4 { font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+
+.level-list { list-style: none; }
+.level-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 8px;
+  font-size: 0.83rem; margin-bottom: 4px;
+  color: rgba(255,255,255,0.4);
+  transition: background 0.2s;
+}
+.level-item.completed { color: rgba(255,255,255,0.7); }
+.level-item.active { background: rgba(37,99,235,0.2); color: var(--white); }
+.level-item.locked { opacity: 0.4; }
+.level-num {
+  width: 24px; height: 24px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.72rem; font-weight: 700; flex-shrink: 0;
+}
+.ln-done { background: #22C55E; color: white; }
+.ln-active { background: var(--blue-mid); color: white; }
+.ln-lock { background: rgba(255,255,255,0.08); color: var(--muted); }
+
+.lives-row { display: flex; gap: 6px; }
+.heart { font-size: 1.2rem; transition: transform 0.3s; }
+.heart.lost { filter: grayscale(1); opacity: 0.3; transform: scale(0.85); }
+
+/* GAME MAIN */
+.game-main {
+  background: var(--off-white);
+  padding: 40px; overflow-y: auto;
+  display: flex; flex-direction: column;
+}
+
+.game-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 32px;
+}
+.level-badge-game {
+  background: var(--blue-pale);
+  border: 1px solid rgba(37,99,235,0.2);
+  color: var(--blue-mid);
+  padding: 6px 16px; border-radius: 100px;
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px;
+}
+.timer-display {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 700; font-size: 0.95rem; color: var(--navy);
+}
+.timer-icon { font-size: 1rem; }
+.timer-val { font-family: 'Playfair Display', serif; font-size: 1.3rem; }
+.timer-val.urgent { color: #EF4444; animation: timerPulse 0.5s ease infinite; }
+@keyframes timerPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+
+.progress-strip {
+  height: 6px; background: rgba(0,0,0,0.08);
+  border-radius: 100px; margin-bottom: 36px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; border-radius: 100px;
+  background: linear-gradient(90deg, var(--blue-mid), var(--blue-light));
+  transition: width 0.4s ease;
+}
+
+.question-area {
+  background: var(--white);
+  border-radius: 20px; padding: 36px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  margin-bottom: 24px;
+  border: 1px solid rgba(0,0,0,0.05);
+  flex-shrink: 0;
+}
+.q-category {
+  display: inline-block;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--blue-mid);
+  background: var(--blue-pale); padding: 4px 12px; border-radius: 6px;
+  margin-bottom: 16px;
+}
+.q-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem; font-weight: 700;
+  color: var(--navy); line-height: 1.4;
+  margin-bottom: 8px;
+}
+.q-points { font-size: 0.8rem; color: var(--muted); }
+
+.options-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.opt-btn {
+  background: var(--white);
+  border: 2px solid rgba(0,0,0,0.08);
+  border-radius: 12px; padding: 16px 18px;
+  cursor: pointer; text-align: left;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.88rem; color: var(--navy); font-weight: 500;
+  display: flex; align-items: flex-start; gap: 12px;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+  line-height: 1.5;
+}
+.opt-btn:hover:not(:disabled) {
+  border-color: var(--blue-mid);
+  background: var(--blue-pale);
+  transform: translateY(-1px);
+}
+.opt-btn.correct { border-color: #22C55E; background: #F0FDF4; color: #15803D; }
+.opt-btn.wrong { border-color: #EF4444; background: #FEF2F2; color: #DC2626; }
+.opt-btn:disabled { cursor: default; }
+.opt-letter-b {
+  width: 28px; height: 28px; border-radius: 7px;
+  background: rgba(0,0,0,0.06);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.72rem; font-weight: 800; flex-shrink: 0;
+  color: var(--muted);
+}
+.opt-btn.correct .opt-letter-b { background: #22C55E; color: white; }
+.opt-btn.wrong .opt-letter-b { background: #EF4444; color: white; }
+
+.feedback-bar {
+  border-radius: 12px; padding: 14px 20px;
+  font-size: 0.88rem; font-weight: 600;
+  display: none; align-items: center; gap: 10px;
+  margin-bottom: 16px;
+}
+.feedback-bar.show { display: flex; }
+.feedback-bar.correct { background: #F0FDF4; color: #15803D; border: 1px solid #BBF7D0; }
+.feedback-bar.wrong { background: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; }
+
+.next-btn {
+  align-self: flex-end;
+  background: linear-gradient(135deg, var(--blue-mid), var(--blue-light));
+  border: none; padding: 12px 32px;
+  border-radius: 10px; color: white;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.9rem; font-weight: 700;
+  cursor: pointer; display: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.next-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37,99,235,0.35); }
+.next-btn.show { display: block; }
+
+/* LEVEL COMPLETE */
+.level-complete {
+  background: var(--white); border-radius: 20px; padding: 40px;
+  text-align: center; box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  display: none;
+}
+.level-complete.show { display: block; }
+.lc-stars { font-size: 2.5rem; margin-bottom: 16px; }
+.lc-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
+.lc-sub { color: var(--muted); margin-bottom: 28px; }
+.lc-stats { display: flex; gap: 24px; justify-content: center; margin-bottom: 28px; }
+.lc-stat { text-align: center; }
+.lc-stat-n { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 800; color: var(--blue-mid); }
+.lc-stat-l { font-size: 0.75rem; color: var(--muted); }
+.btn-next-level {
+  background: linear-gradient(135deg, var(--blue-mid), var(--blue-light));
+  border: none; padding: 14px 40px; border-radius: 10px;
+  color: white; font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.95rem; font-weight: 700; cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-next-level:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,99,235,0.35); }
+
+/* GAME OVER */
+.game-over-overlay {
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: rgba(10,22,40,0.9); backdrop-filter: blur(12px);
+  align-items: center; justify-content: center;
+}
+.game-over-overlay.show { display: flex; }
+.game-over-card {
+  background: var(--white); border-radius: 24px; padding: 48px;
+  text-align: center; max-width: 420px; width: 90%;
+  animation: popIn 0.4s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes popIn { from{transform:scale(0.7);opacity:0} to{transform:scale(1);opacity:1} }
+.go-icon { font-size: 4rem; margin-bottom: 16px; }
+.go-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
+.go-sub { color: var(--muted); margin-bottom: 28px; font-size: 0.9rem; }
+.btn-retry {
+  background: linear-gradient(135deg, var(--blue-mid), var(--blue-light));
+  border: none; padding: 13px 36px; border-radius: 10px;
+  color: white; font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.9rem; font-weight: 700; cursor: pointer;
+  transition: transform 0.2s; margin: 4px;
+}
+.btn-retry:hover { transform: translateY(-2px); }
+.btn-home-go {
+  background: transparent; border: 2px solid rgba(0,0,0,0.1);
+  padding: 11px 36px; border-radius: 10px;
+  color: var(--navy); font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.9rem; font-weight: 600; cursor: pointer;
+  transition: border-color 0.2s; margin: 4px;
+}
+.btn-home-go:hover { border-color: var(--blue-mid); color: var(--blue-mid); }
+
+/* ══ PROVA SCREEN ══ */
+#prova { background: var(--off-white); color: var(--navy); }
+#prova .topbar { background: var(--white); border-color: rgba(0,0,0,0.08); }
+#prova .topbar .logo-text { color: var(--navy); }
+
+.prova-container {
+  flex: 1; padding: 48px;
+  max-width: 760px; margin: 0 auto; width: 100%;
+}
+.prova-header { text-align: center; margin-bottom: 48px; }
+.prova-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #FFF7ED; border: 1px solid #FED7AA;
+  padding: 6px 16px; border-radius: 100px;
+  font-size: 0.75rem; font-weight: 700; color: #C2410C;
+  letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 20px;
+}
+.prova-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem; font-weight: 800; color: var(--navy); margin-bottom: 8px;
+}
+.prova-sub { color: var(--muted); font-size: 0.9rem; }
+
+.prova-timer-bar {
+  background: var(--white); border-radius: 14px; padding: 16px 24px;
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 28px; border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.pt-label { font-size: 0.75rem; font-weight: 700; color: var(--muted); letter-spacing: 0.5px; }
+.pt-value { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 800; color: var(--navy); margin-left: auto; }
+.pt-strip { flex: 1; height: 6px; background: rgba(0,0,0,0.06); border-radius: 100px; overflow: hidden; }
+.pt-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, #22C55E, var(--blue-light)); transition: width 0.5s linear; }
+.pt-fill.danger { background: linear-gradient(90deg, #EF4444, #F97316); }
+
+.prova-question-card {
+  background: var(--white); border-radius: 16px; padding: 32px;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  margin-bottom: 20px;
+}
+.pq-num { font-size: 0.72rem; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+.pq-text { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--navy); line-height: 1.5; margin-bottom: 24px; }
+.pq-opts { display: flex; flex-direction: column; gap: 10px; }
+.pq-opt {
+  padding: 14px 18px; border-radius: 10px;
+  border: 2px solid rgba(0,0,0,0.08);
+  cursor: pointer; font-size: 0.88rem; font-weight: 500;
+  color: var(--navy); background: var(--off-white);
+  display: flex; align-items: center; gap: 12px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.pq-opt:hover:not(:disabled):not(.selected) { border-color: var(--blue-mid); background: var(--blue-pale); }
+.pq-opt.selected { border-color: var(--blue-mid); background: var(--blue-pale); color: var(--blue-mid); }
+.pq-opt .pq-radio {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 2px solid rgba(0,0,0,0.15); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.2s;
+}
+.pq-opt.selected .pq-radio { border-color: var(--blue-mid); }
+.pq-radio-inner { width: 8px; height: 8px; border-radius: 50%; background: var(--blue-mid); display: none; }
+.pq-opt.selected .pq-radio-inner { display: block; }
+
+.prova-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 8px;
+}
+.prova-progress-dots { display: flex; gap: 6px; }
+.p-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(0,0,0,0.1); transition: background 0.2s; }
+.p-dot.answered { background: var(--blue-mid); }
+.p-dot.current { background: var(--blue-light); outline: 2px solid rgba(37,99,235,0.3); outline-offset: 2px; }
+
+.btn-prova-next {
+  background: linear-gradient(135deg, var(--blue-mid), var(--blue-light));
+  border: none; padding: 12px 32px; border-radius: 10px;
+  color: white; font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.9rem; font-weight: 700; cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-prova-next:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37,99,235,0.35); }
+.btn-prova-next:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* ══ RESULTADO SCREEN ══ */
+#resultado { background: var(--off-white); color: var(--navy); }
+#resultado .topbar { background: var(--white); border-color: rgba(0,0,0,0.08); }
+#resultado .topbar .logo-text { color: var(--navy); }
+
+.resultado-container {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  padding: 48px;
+}
+.resultado-card {
+  background: var(--white); border-radius: 24px; padding: 56px 48px;
+  text-align: center; max-width: 520px; width: 100%;
+  box-shadow: 0 8px 48px rgba(0,0,0,0.1);
+}
+.result-ring {
+  width: 120px; height: 120px; border-radius: 50%;
+  margin: 0 auto 24px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; font-size: 2.5rem;
+}
+.ring-pass { background: linear-gradient(135deg, #22C55E, #4ADE80); }
+.ring-fail { background: linear-gradient(135deg, #EF4444, #F87171); }
+
+.result-pct {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem; font-weight: 800; color: var(--navy);
+  line-height: 1; margin-bottom: 4px;
+}
+.result-label { color: var(--muted); margin-bottom: 28px; }
+.result-stat-row { display: flex; gap: 20px; justify-content: center; margin-bottom: 32px; }
+.r-stat { background: var(--off-white); border-radius: 12px; padding: 16px 24px; text-align: center; }
+.r-stat-n { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 800; color: var(--blue-mid); }
+.r-stat-l { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+
+.btn-certificate {
+  width: 100%;
+  background: linear-gradient(135deg, var(--navy), var(--blue-mid));
+  border: none; padding: 15px; border-radius: 12px;
+  color: white; font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1rem; font-weight: 700; cursor: pointer;
+  margin-bottom: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-certificate:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(10,22,40,0.3); }
+.btn-retry-prova {
+  width: 100%; background: transparent;
+  border: 2px solid rgba(0,0,0,0.1); padding: 13px;
+  border-radius: 12px; color: var(--navy);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.9rem; font-weight: 600; cursor: pointer;
+  transition: border-color 0.2s;
+}
+.btn-retry-prova:hover { border-color: var(--blue-mid); color: var(--blue-mid); }
+
+/* ══ CERTIFICADO SCREEN ══ */
+#certificado { background: var(--navy); }
+
+.cert-outer {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  padding: 40px 24px;
+  background: radial-gradient(ellipse at center, rgba(37,99,235,0.08) 0%, transparent 70%);
+}
+
+.cert-wrapper { width: 100%; max-width: 820px; }
+
+.cert-actions {
+  display: flex; gap: 12px; justify-content: flex-end;
+  margin-bottom: 20px;
+}
+.btn-download, .btn-share {
+  padding: 10px 24px; border-radius: 8px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.85rem; font-weight: 600; cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex; align-items: center; gap: 8px;
+}
+.btn-download {
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  border: none; color: var(--navy);
+}
+.btn-download:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(212,175,55,0.4); }
+.btn-share {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2); color: white;
+}
+.btn-share:hover { border-color: white; }
+
+/* THE CERTIFICATE */
+.certificate {
+  background: var(--white);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.cert-border-outer {
+  position: absolute; inset: 10px;
+  border: 2px solid var(--navy);
+  border-radius: 2px; pointer-events: none; z-index: 5;
+}
+.cert-border-inner {
+  position: absolute; inset: 16px;
+  border: 1px solid rgba(10,22,40,0.2);
+  border-radius: 1px; pointer-events: none; z-index: 5;
+}
+
+/* Corner ornaments */
+.cert-corner {
+  position: absolute; width: 48px; height: 48px; z-index: 6;
+  pointer-events: none;
+}
+.cc-tl { top: 20px; left: 20px; }
+.cc-tr { top: 20px; right: 20px; transform: scaleX(-1); }
+.cc-bl { bottom: 20px; left: 20px; transform: scaleY(-1); }
+.cc-br { bottom: 20px; right: 20px; transform: scale(-1); }
+.cert-corner svg path { fill: var(--navy); opacity: 0.4; }
+
+.cert-bg-pattern {
+  position: absolute; inset: 0; z-index: 0;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(10,22,40,0.03) 1px, transparent 1px),
+    radial-gradient(circle at 80% 80%, rgba(10,22,40,0.03) 1px, transparent 1px);
+  background-size: 30px 30px, 30px 30px;
+}
+.cert-bg-seal {
+  position: absolute; bottom: 60px; right: 60px; z-index: 1;
+  width: 160px; height: 160px; opacity: 0.04;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10rem;
+}
+
+.cert-content { position: relative; z-index: 2; padding: 60px 70px; }
+
+.cert-header { text-align: center; margin-bottom: 36px; }
+.cert-school-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.85rem; font-weight: 700;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: var(--navy); opacity: 0.5; margin-bottom: 4px;
+}
+.cert-divider {
+  width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--navy), transparent);
+  opacity: 0.15; margin: 12px 0;
+}
+.cert-title-main {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem; font-weight: 800;
+  color: var(--navy); letter-spacing: -1px;
+  margin-bottom: 4px; line-height: 1;
+}
+.cert-title-sub {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem; font-weight: 700;
+  color: var(--blue-mid); letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.cert-body { text-align: center; margin-bottom: 36px; }
+.cert-intro {
+  color: rgba(10,22,40,0.5); font-size: 0.9rem;
+  margin-bottom: 12px; font-style: italic;
+}
+.cert-student-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem; font-weight: 800;
+  color: var(--navy); letter-spacing: -1px;
+  margin-bottom: 6px; line-height: 1.1;
+}
+.cert-class-info {
+  color: rgba(10,22,40,0.5); font-size: 0.85rem; margin-bottom: 20px;
+}
+.cert-desc {
+  max-width: 520px; margin: 0 auto;
+  color: rgba(10,22,40,0.6); font-size: 0.88rem;
+  line-height: 1.8;
+}
+
+.cert-scores {
+  display: flex; gap: 20px; justify-content: center;
+  margin: 28px 0;
+}
+.cert-score-box {
+  background: var(--off-white); border-radius: 10px;
+  padding: 16px 28px; text-align: center;
+  border: 1px solid rgba(10,22,40,0.08);
+}
+.csb-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem; font-weight: 800; color: var(--navy); line-height: 1;
+}
+.csb-label { font-size: 0.68rem; font-weight: 700; color: rgba(10,22,40,0.35); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+
+.cert-footer {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-top: 32px; padding-top: 24px;
+  border-top: 1px solid rgba(10,22,40,0.08);
+}
+.cert-sig { text-align: center; }
+.cert-sig-line { width: 140px; height: 1px; background: var(--navy); opacity: 0.2; margin: 0 auto 6px; }
+.cert-sig-name { font-size: 0.78rem; font-weight: 700; color: var(--navy); }
+.cert-sig-role { font-size: 0.68rem; color: rgba(10,22,40,0.4); }
+
+.cert-seal {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--navy), var(--blue-mid));
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 2px;
+  border: 3px solid rgba(10,22,40,0.1);
+  box-shadow: 0 4px 16px rgba(10,22,40,0.15);
+}
+.seal-star { font-size: 1.2rem; color: var(--gold2); }
+.seal-text { font-size: 0.48rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.7); }
+
+.cert-id {
+  font-size: 0.65rem; color: rgba(10,22,40,0.3);
+  letter-spacing: 0.5px; text-align: right;
+}
+
+/* Gold banner */
+.cert-gold-bar {
+  height: 6px;
+  background: linear-gradient(90deg, var(--navy), var(--gold), var(--navy));
+}
+
+/* ══ UTILS ══ */
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
+@keyframes confettiFall {
+  0%{transform:translateY(-20px) rotate(0);opacity:1}
+  100%{transform:translateY(100vh) rotate(720deg);opacity:0}
+}
+.confetti-piece {
+  position:fixed; z-index:999; pointer-events:none;
+  width:8px; height:8px; border-radius:2px;
+  animation: confettiFall linear forwards;
+}
+
+@media (max-width: 768px) {
+  .topbar { padding: 14px 20px; }
+  .game-layout { grid-template-columns: 1fr; }
+  .game-sidebar { display: none; }
+  .game-main { padding: 20px; }
+  .options-grid { grid-template-columns: 1fr; }
+  .prova-container { padding: 24px; }
+  .cert-content { padding: 30px 24px; }
+  .cert-scores { flex-wrap: wrap; }
+  .cert-footer { flex-direction: column; gap: 20px; align-items: center; }
+  .cert-title-main { font-size: 2rem; }
+  .cert-student-name { font-size: 1.8rem; }
+  .home-inner { padding: 60px 24px; }
+  .reg-form { padding: 28px 24px; }
+  .journey { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     SCREEN 1: HOME / REGISTRO
+══════════════════════════════════════ -->
+<div class="screen active" id="home">
+  <nav class="topbar">
+    <div class="logo-wrap">
+      <div class="logo-icon">🎓</div>
+      <div class="logo-text">Orienta<span>Tech</span></div>
+    </div>
+    <div class="school-badge">Escola 4045 · Cacuaco</div>
+  </nav>
+
+  <div class="home-bg">
+    <div class="bg-grid"></div>
+    <div class="bg-circle bg-c1"></div>
+    <div class="bg-circle bg-c2"></div>
+  </div>
+
+  <div class="home-inner">
+    <div class="home-eyebrow">
+      <div class="pulse-dot"></div>
+      Orientação Vocacional · 9.ª Classe
+    </div>
+    <h1 class="home-title">
+      Descobre o teu<br>caminho na<br>
+      <span class="accent">Informática</span> <span class="gold">✦</span>
+    </h1>
+    <p class="home-sub">Joga, aprende e conquista o teu certificado digital. Uma jornada interactiva de orientação vocacional para os estudantes da Escola 4045.</p>
+
+    <div class="reg-form">
+      <h2>Começar a Jornada</h2>
+      <p>Preenche os teus dados para iniciar o jogo e a prova vocacional.</p>
+      <div class="field">
+        <label>NOME COMPLETO</label>
+        <input type="text" id="inp-nome" placeholder="Ex: Ana Sebastião Kiala">
+      </div>
+      <div class="field">
+        <label>TURMA</label>
+        <select id="inp-turma">
+          <option value="">Seleccionar turma...</option>
+          <option>9.ª Classe — Turma A</option>
+          <option>9.ª Classe — Turma B</option>
+          <option>9.ª Classe — Turma C</option>
+          <option>9.ª Classe — Turma D</option>
+        </select>
+      </div>
+      <button class="btn-start" onclick="startGame()">🚀 Iniciar Jogo Vocacional</button>
+    </div>
+
+    <div class="journey">
+      <div class="j-step"><div class="j-icon">🎮</div><span>Jogo<br>Vocacional</span></div>
+      <div class="j-line"></div>
+      <div class="j-step"><div class="j-icon">📝</div><span>Prova<br>Final</span></div>
+      <div class="j-line"></div>
+      <div class="j-step"><div class="j-icon">🏆</div><span>Resultado</span></div>
+      <div class="j-line"></div>
+      <div class="j-step"><div class="j-icon">🎓</div><span>Certificado<br>Digital</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 2: JOGO
+══════════════════════════════════════ -->
+<div class="screen" id="game">
+  <nav class="topbar">
+    <div class="logo-wrap">
+      <div class="logo-icon">🎓</div>
+      <div class="logo-text">Orienta<span>Tech</span></div>
+    </div>
+    <div class="school-badge">Escola 4045 · Cacuaco</div>
+    <div class="topbar-right">
+      <div class="student-info" id="studentInfo">
+        <div class="s-name" id="siName">—</div>
+        <div class="s-score">Pontuação: <span id="siScore">0</span></div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="game-layout">
+    <!-- SIDEBAR -->
+    <div class="game-sidebar">
+      <div class="sidebar-player">
+        <div class="player-avatar">🧑‍💻</div>
+        <div class="player-name" id="sbName">Estudante</div>
+        <div class="player-class" id="sbClass">9.ª Classe</div>
+      </div>
+
+      <div class="score-display">
+        <div class="score-label">Pontuação</div>
+        <div class="score-value" id="sbScore">0</div>
+        <div class="score-sub">pontos acumulados</div>
+      </div>
+
+      <div class="sidebar-section">
+        <h4>Níveis</h4>
+        <ul class="level-list" id="levelList"></ul>
+      </div>
+
+      <div class="sidebar-section">
+        <h4>Vidas</h4>
+        <div class="lives-row" id="livesRow">
+          <span class="heart">❤️</span>
+          <span class="heart">❤️</span>
+          <span class="heart">❤️</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN GAME AREA -->
+    <div class="game-main" id="gameMain">
+      <div class="game-header">
+        <span class="level-badge-game" id="levelBadge">Nível 1 — Fundamentos</span>
+        <div class="timer-display">
+          <span class="timer-icon">⏱</span>
+          <span class="timer-val" id="timerVal">30</span>
+          <span style="font-size:0.8rem;color:var(--muted)">s</span>
+        </div>
+      </div>
+
+      <div class="progress-strip">
+        <div class="progress-fill" id="gameProgress" style="width:0%"></div>
+      </div>
+
+      <!-- QUESTION CARD -->
+      <div class="question-area" id="questionArea">
+        <span class="q-category" id="qCategory">Categoria</span>
+        <div class="q-text" id="qText">Carregando pergunta...</div>
+        <div class="q-points" id="qPoints">⭐ 10 pontos</div>
+      </div>
+
+      <div class="feedback-bar" id="feedbackBar">
+        <span id="feedbackIcon">✓</span>
+        <span id="feedbackMsg">Correcto!</span>
+      </div>
+
+      <div class="options-grid" id="optionsGrid"></div>
+
+      <div style="display:flex;justify-content:flex-end;margin-top:20px;">
+        <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Próxima →</button>
+      </div>
+
+      <!-- LEVEL COMPLETE -->
+      <div class="level-complete" id="levelComplete">
+        <div class="lc-stars" id="lcStars">⭐⭐⭐</div>
+        <div class="lc-title" id="lcTitle">Nível Completo!</div>
+        <div class="lc-sub" id="lcSub">Excelente desempenho neste nível!</div>
+        <div class="lc-stats">
+          <div class="lc-stat">
+            <div class="lc-stat-n" id="lcCorrect">0</div>
+            <div class="lc-stat-l">Correctas</div>
+          </div>
+          <div class="lc-stat">
+            <div class="lc-stat-n" id="lcPts">0</div>
+            <div class="lc-stat-l">Pontos</div>
+          </div>
+          <div class="lc-stat">
+            <div class="lc-stat-n" id="lcTime">0s</div>
+            <div class="lc-stat-l">Tempo médio</div>
+          </div>
+        </div>
+        <button class="btn-next-level" id="nextLevelBtn" onclick="proceedNextLevel()">
+          Avançar para a Prova Final →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME OVER OVERLAY -->
+  <div class="game-over-overlay" id="gameOverOverlay">
+    <div class="game-over-card">
+      <div class="go-icon">💀</div>
+      <div class="go-title">Perdeste!</div>
+      <div class="go-sub">As tuas vidas acabaram. Tenta novamente para conseguir chegar à prova final!</div>
+      <div>
+        <button class="btn-retry" onclick="retryGame()">🔄 Recomeçar</button>
+        <button class="btn-home-go" onclick="goHome()">← Voltar ao Início</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 3: PROVA FINAL
+══════════════════════════════════════ -->
+<div class="screen" id="prova">
+  <nav class="topbar">
+    <div class="logo-wrap">
+      <div class="logo-icon">🎓</div>
+      <div class="logo-text">Orienta<span>Tech</span></div>
+    </div>
+    <div class="school-badge">Prova Final</div>
+  </nav>
+
+  <div class="prova-container">
+    <div class="prova-header">
+      <div class="prova-badge">📋 Prova de Orientação Vocacional</div>
+      <div class="prova-title">Prova Final</div>
+      <div class="prova-sub">Responde às 10 perguntas abaixo. Precisas de pelo menos 60% para obter o certificado.</div>
+    </div>
+
+    <div class="prova-timer-bar">
+      <div>
+        <div class="pt-label">TEMPO RESTANTE</div>
+      </div>
+      <div class="pt-strip">
+        <div class="pt-fill" id="provaTimerFill" style="width:100%"></div>
+      </div>
+      <div class="pt-value" id="provaTimerVal">10:00</div>
+    </div>
+
+    <div class="prova-question-card">
+      <div class="pq-num" id="pqNum">PERGUNTA 1 DE 10</div>
+      <div class="pq-text" id="pqText">Carregando...</div>
+      <div class="pq-opts" id="pqOpts"></div>
+    </div>
+
+    <div class="prova-nav">
+      <div class="prova-progress-dots" id="provaDots"></div>
+      <button class="btn-prova-next" id="provaNextBtn" onclick="provaNext()" disabled>
+        Próxima →
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 4: RESULTADO
+══════════════════════════════════════ -->
+<div class="screen" id="resultado">
+  <nav class="topbar">
+    <div class="logo-wrap">
+      <div class="logo-icon">🎓</div>
+      <div class="logo-text">Orienta<span>Tech</span></div>
+    </div>
+    <div class="school-badge">Resultado</div>
+  </nav>
+
+  <div class="resultado-container">
+    <div class="resultado-card">
+      <div class="result-ring" id="resultRing">🏆</div>
+      <div class="result-pct" id="resultPct">0%</div>
+      <div class="result-label" id="resultLabel">A calcular...</div>
+      <div class="result-stat-row">
+        <div class="r-stat">
+          <div class="r-stat-n" id="rCorrect">0</div>
+          <div class="r-stat-l">Correctas</div>
+        </div>
+        <div class="r-stat">
+          <div class="r-stat-n" id="rWrong">0</div>
+          <div class="r-stat-l">Erradas</div>
+        </div>
+        <div class="r-stat">
+          <div class="r-stat-n" id="rGameScore">0</div>
+          <div class="r-stat-l">Pontos Jogo</div>
+        </div>
+      </div>
+      <button class="btn-certificate" id="certBtn" onclick="showCertificate()">🎓 Ver Certificado Digital</button>
+      <button class="btn-retry-prova" onclick="retryProva()">🔄 Repetir Prova</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 5: CERTIFICADO
+══════════════════════════════════════ -->
+<div class="screen" id="certificado">
+  <nav class="topbar">
+    <div class="logo-wrap">
+      <div class="logo-icon">🎓</div>
+      <div class="logo-text">Orienta<span>Tech</span></div>
+    </div>
+    <div class="school-badge">Certificado Digital</div>
+  </nav>
+
+  <div class="cert-outer">
+    <div class="cert-wrapper">
+      <div class="cert-actions">
+        <button class="btn-share" onclick="goHome()">← Nova Sessão</button>
+        <button class="btn-download" onclick="printCert()">⬇ Guardar / Imprimir</button>
+      </div>
+
+      <div class="certificate" id="certDocument">
+        <div class="cert-gold-bar"></div>
+
+        <!-- Decorative borders -->
+        <div class="cert-border-outer"></div>
+        <div class="cert-border-inner"></div>
+
+        <!-- Corner ornaments -->
+        <div class="cert-corner cc-tl">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 4 L20 4 L4 20 Z M4 4 L4 44 L8 44 L8 8 L44 8 L44 4 Z" fill="#0A1628" opacity="0.35"/>
+            <circle cx="24" cy="24" r="3" fill="#0A1628" opacity="0.2"/>
+          </svg>
+        </div>
+        <div class="cert-corner cc-tr">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 4 L20 4 L4 20 Z M4 4 L4 44 L8 44 L8 8 L44 8 L44 4 Z" fill="#0A1628" opacity="0.35"/>
+            <circle cx="24" cy="24" r="3" fill="#0A1628" opacity="0.2"/>
+          </svg>
+        </div>
+        <div class="cert-corner cc-bl">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 4 L20 4 L4 20 Z M4 4 L4 44 L8 44 L8 8 L44 8 L44 4 Z" fill="#0A1628" opacity="0.35"/>
+            <circle cx="24" cy="24" r="3" fill="#0A1628" opacity="0.2"/>
+          </svg>
+        </div>
+        <div class="cert-corner cc-br">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 4 L20 4 L4 20 Z M4 4 L4 44 L8 44 L8 8 L44 8 L44 4 Z" fill="#0A1628" opacity="0.35"/>
+            <circle cx="24" cy="24" r="3" fill="#0A1628" opacity="0.2"/>
+          </svg>
+        </div>
+
+        <div class="cert-bg-pattern"></div>
+        <div class="cert-bg-seal">🎓</div>
+
+        <div class="cert-content">
+          <div class="cert-header">
+            <div class="cert-school-name">República de Angola · Ministério da Educação</div>
+            <div class="cert-divider"></div>
+            <div style="font-size:0.72rem;letter-spacing:3px;text-transform:uppercase;color:rgba(10,22,40,0.35);font-weight:700;margin-bottom:8px;">Escola do Iº Ciclo do Ensino Secundário Nº 4045</div>
+            <div class="cert-title-main">Certificado</div>
+            <div class="cert-title-sub">de Orientação Vocacional</div>
+            <div class="cert-divider"></div>
+          </div>
+
+          <div class="cert-body">
+            <div class="cert-intro">Certifica-se que o(a) estudante</div>
+            <div class="cert-student-name" id="certName">Nome do Estudante</div>
+            <div class="cert-class-info" id="certClass">9.ª Classe · Escola 4045 · Cacuaco Eco Campo</div>
+
+            <div class="cert-scores">
+              <div class="cert-score-box">
+                <div class="csb-value" id="certScoreGame">—</div>
+                <div class="csb-label">Pontos Jogo</div>
+              </div>
+              <div class="cert-score-box">
+                <div class="csb-value" id="certScoreProva">—%</div>
+                <div class="csb-label">Nota da Prova</div>
+              </div>
+              <div class="cert-score-box">
+                <div class="csb-value" id="certNota">—</div>
+                <div class="csb-label">Classificação</div>
+              </div>
+            </div>
+
+            <div class="cert-desc" id="certDesc">
+              concluiu com aproveitamento o Programa de Orientação Vocacional em Tecnologias de Informação e Comunicação, demonstrando aptidão e interesse para o prosseguimento dos estudos no curso de Informática.
+            </div>
+          </div>
+
+          <div class="cert-footer">
+            <div>
+              <div class="cert-id" id="certId">ID: OT-4045-000000</div>
+              <div class="cert-id" id="certDate">Data: — de — de 2025</div>
+            </div>
+            <div class="cert-seal">
+              <div class="seal-star">★</div>
+              <div class="seal-text">Certificado</div>
+              <div class="seal-text">Digital</div>
+            </div>
+            <div class="cert-sig">
+              <div class="cert-sig-line"></div>
+              <div class="cert-sig-name">Direcção Pedagógica</div>
+              <div class="cert-sig-role">Escola 4045 · Cacuaco</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cert-gold-bar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     JAVASCRIPT — FULL GAME ENGINE
+══════════════════════════════════════ -->
+<script>
+// ── DATA ──
+const GAME_LEVELS = [
+  {
+    name: "Fundamentos",
+    questions: [
+      { cat: "Hardware", text: "O que é a CPU num computador?", opts: ["Unidade de Processamento Central", "Memória de armazenamento", "Placa gráfica", "Fonte de alimentação"], ans: 0, pts: 10 },
+      { cat: "Software", text: "Qual é a diferença entre hardware e software?", opts: ["Hardware é físico, software é lógico", "São a mesma coisa", "Hardware é mais caro", "Software é mais rápido"], ans: 0, pts: 10 },
+      { cat: "Internet", text: "O que significa HTML?", opts: ["HyperText Markup Language", "High Transfer Machine Learning", "Home Tool Making Language", "Hyper Tool Main Language"], ans: 0, pts: 10 },
+      { cat: "Sistemas", text: "Qual destes é um sistema operativo?", opts: ["Windows 11", "Google Chrome", "Microsoft Word", "WhatsApp"], ans: 0, pts: 10 },
+      { cat: "Redes", text: "O que é um endereço IP?", opts: ["Identificador único de dispositivos numa rede", "Um tipo de vírus informático", "Um programa de edição de texto", "Um hardware de rede"], ans: 0, pts: 15 }
+    ]
+  },
+  {
+    name: "Programação",
+    questions: [
+      { cat: "Lógica", text: "O que é um algoritmo?", opts: ["Conjunto de instruções para resolver um problema", "Um tipo de computador", "Uma linguagem de programação", "Um componente de hardware"], ans: 0, pts: 15 },
+      { cat: "Python", text: "Em Python, como se escreve um comentário?", opts: ["# Comentário", "// Comentário", "/* Comentário */", "<!-- Comentário -->"], ans: 0, pts: 15 },
+      { cat: "Web", text: "Qual linguagem dá interactividade a páginas web?", opts: ["JavaScript", "HTML", "CSS", "SQL"], ans: 0, pts: 15 },
+      { cat: "Dados", text: "O que é uma base de dados relacional?", opts: ["Dados organizados em tabelas relacionadas", "Um ficheiro de texto simples", "Um tipo de hardware", "Uma rede de computadores"], ans: 0, pts: 20 },
+      { cat: "Lógica", text: "Numa estrutura 'if-else', quando executa o 'else'?", opts: ["Quando a condição é falsa", "Sempre", "Quando a condição é verdadeira", "Nunca"], ans: 0, pts: 20 }
+    ]
+  },
+  {
+    name: "Redes & Segurança",
+    questions: [
+      { cat: "Redes", text: "O que é um router?", opts: ["Dispositivo que encaminha dados entre redes", "Um tipo de vírus", "Memória RAM", "Monitor de computador"], ans: 0, pts: 20 },
+      { cat: "Segurança", text: "O que é um vírus informático?", opts: ["Programa malicioso que se replica e danifica sistemas", "Um hardware defeituoso", "Uma actualização do sistema", "Um tipo de rede"], ans: 0, pts: 20 },
+      { cat: "Redes", text: "O que significa HTTPS?", opts: ["Protocolo seguro de transferência de hipertexto", "Alta Tecnologia Para Transferência de Sistemas", "Novo tipo de linguagem web", "Sistema de armazenamento"], ans: 0, pts: 20 },
+      { cat: "Segurança", text: "O que é uma password forte?", opts: ["Combinação de letras, números e símbolos", "O nome do utilizador", "A data de nascimento", "Uma palavra simples"], ans: 0, pts: 20 },
+      { cat: "Redes", text: "Para que serve um firewall?", opts: ["Proteger uma rede bloqueando acessos não autorizados", "Aumentar a velocidade da internet", "Guardar ficheiros na nuvem", "Instalar programas automaticamente"], ans: 0, pts: 25 }
+    ]
+  }
+];
+
+const PROVA_QUESTIONS = [
+  { text: "Qual componente executa instruções nos programas de computador?", opts: ["CPU", "RAM", "HD", "GPU"], ans: 0 },
+  { text: "O que é o sistema binário na informática?", opts: ["Sistema de numeração com base 2 (0s e 1s)", "Dois computadores ligados", "Um antivírus", "Tipo de cabo de rede"], ans: 0 },
+  { text: "Em HTML, qual tag cria um título principal?", opts: ["<h1>", "<title>", "<p>", "<header>"], ans: 0 },
+  { text: "O que é uma LAN?", opts: ["Rede de área local", "Linguagem de programação", "Tipo de vírus", "Sistema operativo"], ans: 0 },
+  { text: "Para que serve o CSS numa página web?", opts: ["Definir o estilo visual (cores, fontes, layout)", "Criar lógica de programação", "Guardar dados no servidor", "Fazer ligações à internet"], ans: 0 },
+  { text: "O que é o phishing?", opts: ["Tentativa de obter dados sensíveis através de engano", "Técnica de programação", "Tipo de hardware", "Protocolo de rede"], ans: 0 },
+  { text: "O que armazena a memória RAM?", opts: ["Dados temporários em uso pelo sistema", "Ficheiros permanentes", "O sistema operativo para sempre", "Imagens do disco"], ans: 0 },
+  { text: "Qual destas é uma linguagem de programação?", opts: ["Python", "PDF", "USB", "WiFi"], ans: 0 },
+  { text: "O que faz o protocolo TCP/IP?", opts: ["Define como dados são transmitidos na internet", "Protege contra vírus", "Formata o disco rígido", "Instala programas"], ans: 0 },
+  { text: "O que é a resolução de ecrã?", opts: ["Número de píxeis que o ecrã pode exibir", "Brilho do monitor", "Velocidade do processador", "Memória disponível"], ans: 0 }
+];
+
+// ── STATE ──
+let state = {
+  name: "", turma: "",
+  score: 0, lives: 3,
+  currentLevel: 0, currentQ: 0,
+  timer: null, timeLeft: 30,
+  levelCorrect: 0, levelStartScore: 0, levelTimes: [],
+  qStartTime: 0,
+  provaAnswers: Array(10).fill(null),
+  provaCurrentQ: 0, provaTimer: null, provaTimeLeft: 600,
+  provaCorrect: 0
+};
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ── HOME ──
+function startGame() {
+  const name = document.getElementById('inp-nome').value.trim();
+  const turma = document.getElementById('inp-turma').value;
+  if (!name) { alert('Por favor, insere o teu nome!'); return; }
+  if (!turma) { alert('Por favor, selecciona a tua turma!'); return; }
+  state.name = name; state.turma = turma;
+  state.score = 0; state.lives = 3; state.currentLevel = 0; state.currentQ = 0;
+  showScreen('game');
+  initGame();
+}
+
+// ── GAME ──
+function initGame() {
+  document.getElementById('sbName').textContent = state.name;
+  document.getElementById('sbClass').textContent = state.turma;
+  document.getElementById('studentInfo').style.display = 'block';
+  document.getElementById('siName').textContent = state.name;
+  buildLevelList();
+  updateLives();
+  loadQuestion();
+}
+
+function buildLevelList() {
+  const ul = document.getElementById('levelList');
+  ul.innerHTML = GAME_LEVELS.map((l, i) => {
+    let cls = i < state.currentLevel ? 'completed' : i === state.currentLevel ? 'active' : 'locked';
+    let nc = i < state.currentLevel ? 'ln-done' : i === state.currentLevel ? 'ln-active' : 'ln-lock';
+    let icon = i < state.currentLevel ? '✓' : i === state.currentLevel ? '▶' : '🔒';
+    return `<li class="level-item ${cls}"><span class="level-num ${nc}">${icon}</span>${l.name}</li>`;
+  }).join('');
+}
+
+function updateLives() {
+  const row = document.getElementById('livesRow');
+  row.innerHTML = '';
+  for (let i = 0; i < 3; i++) {
+    const h = document.createElement('span');
+    h.className = 'heart' + (i >= state.lives ? ' lost' : '');
+    h.textContent = '❤️';
+    row.appendChild(h);
+  }
+}
+
+function loadQuestion() {
+  const lvl = GAME_LEVELS[state.currentLevel];
+  const q = lvl.questions[state.currentQ];
+  const total = lvl.questions.length;
+  const progress = ((state.currentLevel * 5 + state.currentQ) / (GAME_LEVELS.length * 5)) * 100;
+
+  document.getElementById('levelBadge').textContent = `Nível ${state.currentLevel + 1} — ${lvl.name}`;
+  document.getElementById('gameProgress').style.width = progress + '%';
+  document.getElementById('qCategory').textContent = q.cat;
+  document.getElementById('qText').textContent = q.text;
+  document.getElementById('qPoints').textContent = `⭐ ${q.pts} pontos`;
+  document.getElementById('questionArea').style.display = 'block';
+  document.getElementById('levelComplete').classList.remove('show');
+
+  const letters = ['A','B','C','D'];
+  document.getElementById('optionsGrid').innerHTML = q.opts.map((o, i) =>
+    `<button class="opt-btn" onclick="selectAnswer(${i})">
+      <span class="opt-letter-b">${letters[i]}</span>${o}
+    </button>`
+  ).join('');
+
+  document.getElementById('feedbackBar').classList.remove('show', 'correct', 'wrong');
+  document.getElementById('nextBtn').classList.remove('show');
+
+  // Timer
+  clearInterval(state.timer);
+  state.timeLeft = 30;
+  state.qStartTime = Date.now();
+  updateTimerDisplay();
+  state.timer = setInterval(() => {
+    state.timeLeft--;
+    updateTimerDisplay();
+    if (state.timeLeft <= 0) {
+      clearInterval(state.timer);
+      autoWrong();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const el = document.getElementById('timerVal');
+  el.textContent = state.timeLeft;
+  el.className = 'timer-val' + (state.timeLeft <= 10 ? ' urgent' : '');
+}
+
+function autoWrong() {
+  const q = GAME_LEVELS[state.currentLevel].questions[state.currentQ];
+  document.querySelectorAll('.opt-btn').forEach((b, i) => {
+    b.disabled = true;
+    if (i === q.ans) b.classList.add('correct');
+  });
+  showFeedback(false, 'Tempo esgotado! A resposta correcta estava em destaque.');
+  loseLife();
+  document.getElementById('nextBtn').classList.add('show');
+}
+
+function selectAnswer(idx) {
+  clearInterval(state.timer);
+  const q = GAME_LEVELS[state.currentLevel].questions[state.currentQ];
+  const elapsed = (Date.now() - state.qStartTime) / 1000;
+  state.levelTimes.push(elapsed);
+  const correct = idx === q.ans;
+
+  document.querySelectorAll('.opt-btn').forEach((b, i) => {
+    b.disabled = true;
+    if (i === q.ans) b.classList.add('correct');
+    else if (i === idx && !correct) b.classList.add('wrong');
+  });
+
+  if (correct) {
+    const bonus = state.timeLeft > 20 ? q.pts * 0.5 : state.timeLeft > 10 ? q.pts * 0.25 : 0;
+    const earned = q.pts + Math.round(bonus);
+    state.score += earned;
+    state.levelCorrect++;
+    updateScore();
+    showFeedback(true, `Correcto! +${earned} pontos${bonus > 0 ? ` (bónus de velocidade: +${Math.round(bonus)})` : ''}`);
+  } else {
+    showFeedback(false, `Errado! A resposta correcta era: "${q.opts[q.ans]}"`);
+    loseLife();
+  }
+  document.getElementById('nextBtn').classList.add('show');
+}
+
+function showFeedback(correct, msg) {
+  const bar = document.getElementById('feedbackBar');
+  bar.className = 'feedback-bar show ' + (correct ? 'correct' : 'wrong');
+  document.getElementById('feedbackIcon').textContent = correct ? '✓' : '✗';
+  document.getElementById('feedbackMsg').textContent = msg;
+}
+
+function loseLife() {
+  state.lives--;
+  updateLives();
+  if (state.lives <= 0) {
+    setTimeout(() => document.getElementById('gameOverOverlay').classList.add('show'), 800);
+  }
+}
+
+function updateScore() {
+  document.getElementById('sbScore').textContent = state.score;
+  document.getElementById('siScore').textContent = state.score;
+}
+
+function nextQuestion() {
+  if (state.lives <= 0) return;
+  state.currentQ++;
+  const lvl = GAME_LEVELS[state.currentLevel];
+
+  if (state.currentQ >= lvl.questions.length) {
+    showLevelComplete();
+  } else {
+    loadQuestion();
+  }
+}
+
+function showLevelComplete() {
+  clearInterval(state.timer);
+  document.getElementById('questionArea').style.display = 'none';
+  document.getElementById('optionsGrid').innerHTML = '';
+  document.getElementById('feedbackBar').classList.remove('show');
+  document.getElementById('nextBtn').classList.remove('show');
+
+  const lvl = GAME_LEVELS[state.currentLevel];
+  const total = lvl.questions.length;
+  const pct = state.levelCorrect / total;
+  const stars = pct >= 0.8 ? '⭐⭐⭐' : pct >= 0.6 ? '⭐⭐' : '⭐';
+  const avgTime = state.levelTimes.length > 0
+    ? Math.round(state.levelTimes.reduce((a,b) => a+b, 0) / state.levelTimes.length)
+    : 0;
+  const levelPts = state.score - state.levelStartScore;
+
+  document.getElementById('lcStars').textContent = stars;
+  document.getElementById('lcTitle').textContent = `Nível ${state.currentLevel + 1} Completo!`;
+  document.getElementById('lcSub').textContent = pct >= 0.8 ? 'Excelente! Estás preparado para a prova!' : pct >= 0.6 ? 'Bom trabalho! Continua assim!' : 'Passaste, mas podes melhorar!';
+  document.getElementById('lcCorrect').textContent = state.levelCorrect + '/' + total;
+  document.getElementById('lcPts').textContent = levelPts;
+  document.getElementById('lcTime').textContent = avgTime + 's';
+
+  const isLastLevel = state.currentLevel >= GAME_LEVELS.length - 1;
+  const btn = document.getElementById('nextLevelBtn');
+  if (isLastLevel) {
+    btn.textContent = '📝 Ir para a Prova Final →';
+  } else {
+    btn.textContent = `Avançar para Nível ${state.currentLevel + 2} →`;
+  }
+
+  document.getElementById('levelComplete').classList.add('show');
+}
+
+function proceedNextLevel() {
+  const isLastLevel = state.currentLevel >= GAME_LEVELS.length - 1;
+  if (isLastLevel) {
+    startProva();
+  } else {
+    state.currentLevel++;
+    state.currentQ = 0;
+    state.levelCorrect = 0;
+    state.levelStartScore = state.score;
+    state.levelTimes = [];
+    buildLevelList();
+    document.getElementById('levelComplete').classList.remove('show');
+    document.getElementById('questionArea').style.display = 'block';
+    loadQuestion();
+  }
+}
+
+function retryGame() {
+  document.getElementById('gameOverOverlay').classList.remove('show');
+  state.score = 0; state.lives = 3;
+  state.currentLevel = 0; state.currentQ = 0;
+  state.levelCorrect = 0; state.levelStartScore = 0; state.levelTimes = [];
+  updateScore(); updateLives(); buildLevelList();
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('questionArea').style.display = 'block';
+  loadQuestion();
+}
+
+function goHome() {
+  clearInterval(state.timer);
+  clearInterval(state.provaTimer);
+  showScreen('home');
+}
+
+// ── PROVA ──
+function startProva() {
+  showScreen('prova');
+  state.provaAnswers = Array(10).fill(null);
+  state.provaCurrentQ = 0;
+  state.provaTimeLeft = 600;
+  buildProvaDots();
+  loadProvaQuestion();
+  startProvaTimer();
+}
+
+function startProvaTimer() {
+  clearInterval(state.provaTimer);
+  state.provaTimer = setInterval(() => {
+    state.provaTimeLeft--;
+    const mins = Math.floor(state.provaTimeLeft / 60);
+    const secs = state.provaTimeLeft % 60;
+    document.getElementById('provaTimerVal').textContent =
+      `${mins}:${secs.toString().padStart(2,'0')}`;
+    const pct = (state.provaTimeLeft / 600) * 100;
+    const fill = document.getElementById('provaTimerFill');
+    fill.style.width = pct + '%';
+    if (pct < 30) fill.className = 'pt-fill danger';
+    if (state.provaTimeLeft <= 0) {
+      clearInterval(state.provaTimer);
+      finishProva();
+    }
+  }, 1000);
+}
+
+function buildProvaDots() {
+  const dots = document.getElementById('provaDots');
+  dots.innerHTML = PROVA_QUESTIONS.map((_, i) =>
+    `<div class="p-dot ${i === 0 ? 'current' : ''}" id="pdot-${i}"></div>`
+  ).join('');
+}
+
+function updateProvaDots() {
+  PROVA_QUESTIONS.forEach((_, i) => {
+    const d = document.getElementById('pdot-' + i);
+    if (!d) return;
+    d.className = 'p-dot' +
+      (i === state.provaCurrentQ ? ' current' : state.provaAnswers[i] !== null ? ' answered' : '');
+  });
+}
+
+function loadProvaQuestion() {
+  const q = PROVA_QUESTIONS[state.provaCurrentQ];
+  document.getElementById('pqNum').textContent = `PERGUNTA ${state.provaCurrentQ + 1} DE ${PROVA_QUESTIONS.length}`;
+  document.getElementById('pqText').textContent = q.text;
+  document.getElementById('pqOpts').innerHTML = q.opts.map((o, i) =>
+    `<div class="pq-opt ${state.provaAnswers[state.provaCurrentQ] === i ? 'selected' : ''}"
+      onclick="selectProvaOpt(${i})">
+      <div class="pq-radio">
+        <div class="pq-radio-inner"></div>
+      </div>
+      ${o}
+    </div>`
+  ).join('');
+  document.getElementById('provaNextBtn').disabled = state.provaAnswers[state.provaCurrentQ] === null;
+  updateProvaDots();
+  const isLast = state.provaCurrentQ >= PROVA_QUESTIONS.length - 1;
+  document.getElementById('provaNextBtn').textContent = isLast ? 'Submeter Prova ✓' : 'Próxima →';
+}
+
+function selectProvaOpt(idx) {
+  state.provaAnswers[state.provaCurrentQ] = idx;
+  document.querySelectorAll('.pq-opt').forEach((o, i) => {
+    o.classList.toggle('selected', i === idx);
+  });
+  document.getElementById('provaNextBtn').disabled = false;
+}
+
+function provaNext() {
+  const isLast = state.provaCurrentQ >= PROVA_QUESTIONS.length - 1;
+  if (isLast) {
+    clearInterval(state.provaTimer);
+    finishProva();
+  } else {
+    state.provaCurrentQ++;
+    loadProvaQuestion();
+  }
+}
+
+function finishProva() {
+  let correct = 0;
+  PROVA_QUESTIONS.forEach((q, i) => { if (state.provaAnswers[i] === q.ans) correct++; });
+  state.provaCorrect = correct;
+  showResultado(correct);
+}
+
+// ── RESULTADO ──
+function showResultado(correct) {
+  showScreen('resultado');
+  const pct = Math.round((correct / PROVA_QUESTIONS.length) * 100);
+  const passed = pct >= 60;
+
+  document.getElementById('resultRing').textContent = passed ? '🏆' : '😔';
+  document.getElementById('resultRing').className = 'result-ring ' + (passed ? 'ring-pass' : 'ring-fail');
+  document.getElementById('resultPct').textContent = pct + '%';
+  document.getElementById('resultLabel').textContent = passed
+    ? '✅ Aprovado! Conquistaste o certificado digital!'
+    : '❌ Não aprovado. Precisas de 60% para obter o certificado.';
+  document.getElementById('rCorrect').textContent = correct;
+  document.getElementById('rWrong').textContent = PROVA_QUESTIONS.length - correct;
+  document.getElementById('rGameScore').textContent = state.score;
+  document.getElementById('certBtn').style.display = passed ? 'block' : 'none';
+
+  if (passed) launchConfetti();
+}
+
+function retryProva() {
+  startProva();
+}
+
+// ── CERTIFICADO ──
+function showCertificate() {
+  showScreen('certificado');
+  const pct = Math.round((state.provaCorrect / PROVA_QUESTIONS.length) * 100);
+  const nota = pct >= 90 ? 'Muito Bom' : pct >= 75 ? 'Bom' : pct >= 60 ? 'Suficiente' : 'Insuficiente';
+  const now = new Date();
+  const months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const dateStr = `${now.getDate()} de ${months[now.getMonth()]} de ${now.getFullYear()}`;
+  const certId = 'OT-4045-' + Math.floor(Math.random() * 900000 + 100000);
+
+  document.getElementById('certName').textContent = state.name;
+  document.getElementById('certClass').textContent = `${state.turma} · Escola 4045 · Cacuaco Eco Campo`;
+  document.getElementById('certScoreGame').textContent = state.score;
+  document.getElementById('certScoreProva').textContent = pct + '%';
+  document.getElementById('certNota').textContent = nota;
+  document.getElementById('certId').textContent = `ID: ${certId}`;
+  document.getElementById('certDate').textContent = `Data: ${dateStr}`;
+
+  launchConfetti();
+}
+
+function printCert() {
+  window.print();
+}
+
+// ── CONFETTI ──
+function launchConfetti() {
+  const colors = ['#1E4DA1','#2563EB','#3B82F6','#D4AF37','#F0D060','#0A1628','#ffffff'];
+  for (let i = 0; i < 80; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.cssText = `
+      left:${Math.random()*100}vw;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      width:${6+Math.random()*8}px;
+      height:${6+Math.random()*8}px;
+      border-radius:${Math.random()>0.5?'50%':'2px'};
+      animation-duration:${2+Math.random()*3}s;
+      animation-delay:${Math.random()*1.5}s;
+    `;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 5000);
+  }
+}
+
+// Print styles
+const printStyle = document.createElement('style');
+printStyle.textContent = `
+@media print {
+  body * { visibility: hidden; }
+  #certDocument, #certDocument * { visibility: visible; }
+  #certDocument { position: fixed; left: 0; top: 0; width: 100%; }
+  .cert-actions, nav { display: none !important; }
+}`;
+document.head.appendChild(printStyle);
+</script>
+</body>
+</html>
